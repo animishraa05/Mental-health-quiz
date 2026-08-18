@@ -183,36 +183,52 @@ export default function EIQuizPage() {
   const progress = ((currentStatement + 1) / STATEMENTS.length) * 100
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-violet-100 flex items-center justify-center p-4">
-      <Card className="w-full max-w-4xl">
-        <CardHeader>
-          <CardTitle className="text-2xl font-bold text-center">Emotional Intelligence Assessment</CardTitle>
-          <CardDescription className="text-center">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-fuchsia-50 to-violet-100 flex items-center justify-center p-4">
+      <Card className="w-full max-w-4xl shadow-xl rounded-2xl border-0 bg-white/95 backdrop-blur-sm">
+        <CardHeader className="pb-8">
+          <CardTitle className="text-3xl font-bold text-center text-purple-900">Emotional Intelligence Assessment</CardTitle>
+          <CardDescription className="text-center text-base mt-2">
             Statement {currentStatement + 1} of {STATEMENTS.length}
           </CardDescription>
-          <Progress value={progress} className="w-full" />
+          <div className="pt-4">
+            <Progress value={progress} className="w-full h-2" />
+          </div>
         </CardHeader>
-        <CardContent className="space-y-6">
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-center">{STATEMENTS[currentStatement]}</h3>
-            <p className="text-sm text-gray-600 text-center">
-              Rate how well this statement describes you (1 = Not at all, 5 = Very much)
-            </p>
+        <CardContent className="space-y-10">
+          <div className="space-y-8">
+            <div className="text-center space-y-3">
+              <h3 className="text-2xl font-semibold text-gray-800 leading-relaxed px-4">{STATEMENTS[currentStatement]}</h3>
+              <p className="text-base text-gray-500">
+                Rate how well this statement describes you
+              </p>
+            </div>
+            
             <RadioGroup
               value={answers[currentStatement]?.toString() || ""}
               onValueChange={handleAnswerChange}
-              className="flex justify-center space-x-8"
+              className="flex justify-center gap-3 sm:gap-6 pt-4"
             >
-              {[1, 2, 3, 4, 5].map((rating) => (
-                <div key={rating} className="flex flex-col items-center space-y-2">
-                  <RadioGroupItem value={rating.toString()} id={`rating-${rating}`} />
-                  <Label htmlFor={`rating-${rating}`} className="text-sm cursor-pointer">
-                    {rating}
-                  </Label>
-                </div>
-              ))}
+              {[1, 2, 3, 4, 5].map((rating) => {
+                const isSelected = answers[currentStatement]?.toString() === rating.toString();
+                return (
+                  <div key={rating} className="flex flex-col items-center space-y-3 group cursor-pointer" onClick={() => handleAnswerChange(rating.toString())}>
+                    <div className={`relative flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-full border-2 transition-all duration-300 ${
+                      isSelected 
+                        ? "border-purple-500 bg-purple-50 shadow-md scale-110" 
+                        : "border-gray-200 hover:border-purple-300 hover:bg-purple-50/50 bg-white group-hover:scale-105"
+                    }`}>
+                      <span className={`text-xl font-medium transition-colors ${isSelected ? "text-purple-700" : "text-gray-600"}`}>
+                        {rating}
+                      </span>
+                      {/* Hidden actual radio input for accessibility/form state */}
+                      <RadioGroupItem value={rating.toString()} id={`rating-${rating}`} className="absolute opacity-0 w-full h-full cursor-pointer" />
+                    </div>
+                  </div>
+                );
+              })}
             </RadioGroup>
-            <div className="flex justify-between text-xs text-gray-500 px-4">
+            
+            <div className="flex justify-between text-sm font-medium text-gray-400 px-6 sm:px-12 pt-2">
               <span>Not at all</span>
               <span>Very much</span>
             </div>

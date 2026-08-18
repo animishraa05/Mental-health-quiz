@@ -53,7 +53,19 @@ export default function AllResultsPage() {
   }, [router])
 
   const handleStartOver = () => {
-    localStorage.clear()
+    const keysToRemove = [
+      "quiz_user_id",
+      "quiz_session_id",
+      "quiz_session_token",
+      "vak_results",
+      "ei_results",
+      "rep_system_results",
+    ]
+    keysToRemove.forEach((key) => localStorage.removeItem(key))
+    // Also clean up any progress snapshots
+    Object.keys(localStorage)
+      .filter((k) => k.startsWith("vak_quiz_progress_") || k.startsWith("ei_quiz_progress_") || k.startsWith("rep_quiz_progress_"))
+      .forEach((k) => localStorage.removeItem(k))
     router.push("/")
   }
 

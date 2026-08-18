@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { Analytics } from "@vercel/analytics/next"
+
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -173,7 +173,7 @@ export default function DemographicsPage() {
                     const value = e.target.value
                     if (value === "" || /^[0-9]+$/.test(value)) {
                       setFormData((prev) => ({ ...prev, age: value }))
-                      setValidationErrors((prev) => ({ ...prev, age: undefined })) // Clear error on valid input
+                      setValidationErrors((prev) => { const next = { ...prev }; delete next.age; return next }) // Clear error on valid input
                     }
                   }}
                   placeholder="Enter your age"

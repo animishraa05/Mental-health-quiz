@@ -68,11 +68,11 @@ export const REP_SYSTEM_SCORING = {
 
   // Step 2: Calculate totals for each system
   calculateScores: (responses: { questionId: number; ranking: number; optionIndex: number }[]) => {
-    const scores = { V: 0, A: 0, K: 0, Ad: 0 }
-    const answerKey = REP_SYSTEM_SCORING.getAnswerKey()
+    const scores: Record<string, number> = { V: 0, A: 0, K: 0, Ad: 0 }
+    const answerKey: Record<number, Record<number, string>> = REP_SYSTEM_SCORING.getAnswerKey()
 
     responses.forEach((response) => {
-      const systemType = answerKey[response.questionId][response.optionIndex + 1]
+      const systemType: string = answerKey[response.questionId][response.optionIndex + 1]
       // Higher ranking (4 = most preferred) gets more points
       scores[systemType] += 5 - response.ranking
     })

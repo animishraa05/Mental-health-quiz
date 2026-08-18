@@ -170,27 +170,39 @@ export default function VAKQuizPage() {
   const currentQuestionData = VAK_QUESTIONS[currentQuestion]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-100 flex items-center justify-center p-4">
-      <Card className="w-full max-w-3xl">
-        <CardHeader>
-          <CardTitle className="text-2xl font-bold text-center">VAK Learning Style Assessment</CardTitle>
-          <CardDescription className="text-center">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-100 flex items-center justify-center p-4">
+      <Card className="w-full max-w-3xl shadow-xl rounded-2xl border-0 bg-white/95 backdrop-blur-sm">
+        <CardHeader className="pb-8">
+          <CardTitle className="text-3xl font-bold text-center text-emerald-900">VAK Learning Style Assessment</CardTitle>
+          <CardDescription className="text-center text-base mt-2">
             Question {currentQuestion + 1} of {VAK_QUESTIONS.length}
           </CardDescription>
-          <Progress value={progress} className="w-full" />
+          <div className="pt-4">
+            <Progress value={progress} className="w-full h-2" />
+          </div>
         </CardHeader>
-        <CardContent className="space-y-6">
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold">{currentQuestionData.text}</h3>
-            <RadioGroup value={answers[currentQuestion] || ""} onValueChange={handleAnswerChange} className="space-y-3">
-              {currentQuestionData.options.map((option, index) => (
-                <div key={index} className="flex items-center space-x-2 p-3 rounded-lg border hover:bg-gray-50">
-                  <RadioGroupItem value={option.value} id={`option-${index}`} />
-                  <Label htmlFor={`option-${index}`} className="flex-1 cursor-pointer">
-                    {option.label}
-                  </Label>
-                </div>
-              ))}
+        <CardContent className="space-y-8">
+          <div className="space-y-6">
+            <h3 className="text-xl font-semibold text-gray-800 leading-relaxed">{currentQuestionData.text}</h3>
+            <RadioGroup value={answers[currentQuestion] || ""} onValueChange={handleAnswerChange} className="space-y-4">
+              {currentQuestionData.options.map((option, index) => {
+                const isSelected = answers[currentQuestion] === option.value;
+                return (
+                  <div 
+                    key={index} 
+                    className={`flex items-center space-x-3 p-4 rounded-xl border-2 transition-all duration-200 ${
+                      isSelected 
+                        ? "border-emerald-500 bg-emerald-50/50 shadow-sm" 
+                        : "border-transparent bg-gray-50/80 hover:border-emerald-200 hover:bg-white hover:shadow-sm"
+                    }`}
+                  >
+                    <RadioGroupItem value={option.value} id={`option-${index}`} className={isSelected ? "text-emerald-600" : ""} />
+                    <Label htmlFor={`option-${index}`} className="flex-1 cursor-pointer text-base text-gray-700 leading-relaxed py-1">
+                      {option.label}
+                    </Label>
+                  </div>
+                );
+              })}
             </RadioGroup>
           </div>
 

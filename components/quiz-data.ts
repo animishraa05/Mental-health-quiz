@@ -1,4 +1,4 @@
-```tsx file="components/vak-questions.ts"
+
 export const VAK_QUESTIONS = [
   {
     text: "I make important decisions based on:",

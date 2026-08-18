@@ -62,8 +62,16 @@ export default function AdminDashboard() {
   const router = useRouter()
 
   useEffect(() => {
-    fetchData()
-  }, [])
+    const init = async () => {
+      const { isAdmin } = await checkAdminAuth()
+      if (!isAdmin) {
+        router.push("/login")
+        return
+      }
+      fetchData()
+    }
+    init()
+  }, [router])
 
   useEffect(() => {
     filterUsers()
@@ -84,11 +92,12 @@ export default function AdminDashboard() {
       setUsers(usersData as UserData[])
 
       // Calculate stats from the fetched data
-      const totalUsers = usersData.length
-      const completedUsers = usersData.filter((u) => u.all_completed).length
-      const vakCompleted = usersData.filter((u) => u.vak_completed).length
-      const eiCompleted = usersData.filter((u) => u.ei_completed).length
-      const repSystemCompleted = usersData.filter((u) => u.rep_system_completed).length
+      const typedData = usersData as UserData[]
+      const totalUsers = typedData.length
+      const completedUsers = typedData.filter((u: UserData) => u.all_completed).length
+      const vakCompleted = typedData.filter((u: UserData) => u.vak_completed).length
+      const eiCompleted = typedData.filter((u: UserData) => u.ei_completed).length
+      const repSystemCompleted = typedData.filter((u: UserData) => u.rep_system_completed).length
 
       setStats({
         totalUsers,
@@ -113,11 +122,12 @@ export default function AdminDashboard() {
     let filtered = users
 
     if (searchTerm) {
+      const term = searchTerm.toLowerCase()
       filtered = filtered.filter(
         (user) =>
-          user.user_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          user.user_email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          user.user_course_name.toLowerCase().includes(searchTerm.toLowerCase())
+          (user.user_name || "").toLowerCase().includes(term) ||
+          (user.user_email || "").toLowerCase().includes(term) ||
+          (user.user_course_name || "").toLowerCase().includes(term)
       )
     }
 
@@ -130,7 +140,7 @@ export default function AdminDashboard() {
     }
 
     if (semesterFilter !== "all") {
-      filtered = filtered.filter((user) => user.user_semester.toString() === semesterFilter)
+      filtered = filtered.filter((user) => String(user.user_semester) === semesterFilter)
     }
 
     if (completionFilter !== "all") {
@@ -185,7 +195,7 @@ export default function AdminDashboard() {
   }
 
   const getUniqueCourses = () => {
-    const uniqueCourseNames = [...new Set(users.map((user) => user.user_course_name))].sort()
+    const uniqueCourseNames = [...new Set(users.map((user) => user.user_course_name).filter(Boolean))].sort()
     return uniqueCourseNames.map((courseName) => {
       const course = COURSES.find((c) => c.name === courseName)
       return { id: course?.id || courseName, name: courseName }
@@ -468,7 +478,7 @@ export default function AdminDashboard() {
                         </div>
                       </td>
                       <td className="p-2 text-sm text-gray-600">
-                        {new Date(user.user_registration_date).toLocaleDateString()}
+                        {user.user_registration_date ? new Date(user.user_registration_date).toLocaleDateString() : "N/A"}
                       </td>
                     </tr>
                   ))}

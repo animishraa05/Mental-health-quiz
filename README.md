@@ -1,77 +1,74 @@
-# Mental Health Quiz
+# Mental Health and Learning Styles Assessment
 
-This is a web application that provides a series of quizzes to help users understand their mental health better. The quizzes are based on different psychological models: Emotional Intelligence (EI), Representational Systems (Rep System), and Visual-Auditory-Kinesthetic (VAK).
+This application provides a comprehensive suite of psychological and learning style assessments designed to help individuals understand their cognitive preferences and emotional intelligence. The platform is built for seamless anonymous participation while providing robust administrative tools for data analysis.
 
 ## Features
 
-*   **Three Different Quizzes:** Take quizzes on Emotional Intelligence, Representational Systems, and VAK.
-*   **Personalized Results:** Receive detailed results and interpretations based on your answers.
-*   **Admin Panel:** An admin panel to manage the application (further development needed).
-*   **User Authentication:** Secure user authentication using Supabase.
-*   **Export Results:** Export your quiz results for your personal records.
+*   Comprehensive Assessments: Three distinct assessments are included:
+    *   Visual-Auditory-Kinesthetic (VAK) Learning Style Assessment
+    *   Emotional Intelligence (EI) Evaluation
+    *   Representational System Preference Test
+*   Frictionless Onboarding: Users can participate anonymously by providing basic demographic information without the need for complex account creation or passwords.
+*   Persistent Sessions: Progress is saved locally, allowing users to navigate between quizzes without losing their state.
+*   Admin Dashboard: A secure, authenticated dashboard for administrators to view, filter, and analyze participation metrics.
+*   Data Export: Administrators can export filtered datasets as CSV files for further analysis.
+*   Modern Interface: A responsive, accessible, and carefully designed user interface powered by Next.js and Tailwind CSS.
 
-## Tech Stack
+## Architecture and Technology Stack
 
-*   **Framework:** [Next.js](https://nextjs.org/)
-*   **Language:** [TypeScript](https://www.typescriptlang.org/)
-*   **UI Components:** [shadcn/ui](https://ui.shadcn.com/)
-*   **Styling:** [Tailwind CSS](https://tailwindcss.com/)
-*   **Backend & Auth:** [Supabase](https://supabase.io/)
-*   **Form Management:** [React Hook Form](https://react-hook-form.com/)
-*   **Schema Validation:** [Zod](https://zod.dev/)
+*   Frontend Framework: Next.js (App Router)
+*   Language: TypeScript
+*   Styling: Tailwind CSS
+*   UI Components: shadcn/ui (Radix UI primitives)
+*   Backend Database: Supabase (PostgreSQL)
+*   Form Handling: React Hook Form with Zod validation
+*   Icons: Lucide React
 
 ## Getting Started
 
-To get a local copy up and running, follow these simple steps.
-
 ### Prerequisites
 
-*   Node.js (v18 or later)
-*   pnpm
+*   Node.js (v18 or later recommended)
+*   pnpm package manager
+*   A Supabase project instance
 
 ### Installation
 
-1.  Clone the repo
-    ```sh
+1.  Clone the repository:
+    ```bash
     git clone https://github.com/your_username/mental-health-quiz.git
+    cd mental-health-quiz
     ```
-2.  Install PNPM packages
-    ```sh
+
+2.  Install dependencies using pnpm:
+    ```bash
     pnpm install
     ```
-3.  Set up your environment variables. Create a `.env.local` file in the root of the project and add the following variables:
-    ```
+
+3.  Configure Environment Variables:
+    Create a `.env.local` file in the root directory and add your Supabase credentials:
+    ```env
     NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
     NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
     ```
-    You can get these from your Supabase project settings.
+    Note: Never commit your `.env.local` file to version control.
 
-4.  Run the development server
-    ```sh
+4.  Database Setup:
+    Ensure your Supabase PostgreSQL database is configured with the correct tables, views, and Row Level Security (RLS) policies.
+
+5.  Start the Development Server:
+    ```bash
     pnpm dev
     ```
+    The application will be available at http://localhost:3000.
 
-## Project Structure
+## Project Structure Overview
 
-```
-/
-├── app/                  # Next.js App Router pages
-│   ├── admin/            # Admin dashboard
-│   ├── quiz/             # Quiz pages for different models
-│   └── ...
-├── components/           # Shared UI components
-│   ├── ui/               # shadcn/ui components
-│   └── ...
-├── lib/                  # Core logic and utilities
-│   ├── auth.ts           # Authentication logic
-│   ├── supabase.ts       # Supabase client setup
-│   └── ...
-├── public/               # Static assets
-├── scripts/              # Database scripts
-└── ...
-```
+*   `/app`: Contains all Next.js routes, including the main landing page, quiz interfaces, and the admin dashboard.
+*   `/components`: Reusable UI components, including the shadcn/ui library components and quiz question data.
+*   `/lib`: Core utility functions, including the Supabase client initialization, authentication helpers, and scoring algorithms.
+*   `/public`: Static assets like images and fonts.
 
-## Database
+## Additional Documentation
 
-The project uses a PostgreSQL database managed by Supabase. The database schema can be found in `scripts/01-final-database-schema.sql`. You can run this script in your Supabase SQL editor to set up the necessary tables.
-
+For a deeper dive into the system architecture, database schema, and scoring methodologies, please refer to the DOCUMENTATION.md file included in this repository.

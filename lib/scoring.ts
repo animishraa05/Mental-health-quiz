@@ -35,12 +35,12 @@ export function calculateVAKScores(answers: Record<number, string>): VAKScores {
 }
 
 export function getVAKDominantStyle(scores: VAKScores): string {
-  const styleNames = { V: "Visual", A: "Auditory", K: "Kinesthetic" }
-  const dominantKey = Object.entries(scores).reduce((a, b) =>
-    scores[a[0] as keyof VAKScores] > scores[b[0] as keyof VAKScores] ? a : b,
-  )[0] as keyof VAKScores
-
-  return styleNames[dominantKey]
+  const styleNames: Record<keyof VAKScores, string> = { V: "Visual", A: "Auditory", K: "Kinesthetic" }
+  const maxScore = Math.max(scores.V, scores.A, scores.K)
+  const dominant = (Object.keys(scores) as Array<keyof VAKScores>).filter(
+    (key) => scores[key] === maxScore
+  )
+  return dominant.map((key) => styleNames[key]).join(" / ")
 }
 
 // Emotional Intelligence Scoring

@@ -207,43 +207,55 @@ export default function RepSystemQuizPage() {
   const question = REP_SYSTEM_QUESTIONS[currentQuestion]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
-      <Card className="w-full max-w-4xl">
-        <CardHeader>
-          <CardTitle className="text-2xl font-bold text-center">Representational System Preference Test</CardTitle>
-          <CardDescription className="text-center">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-sky-50 to-indigo-100 flex items-center justify-center p-4">
+      <Card className="w-full max-w-4xl shadow-xl rounded-2xl border-0 bg-white/95 backdrop-blur-sm">
+        <CardHeader className="pb-8">
+          <CardTitle className="text-3xl font-bold text-center text-indigo-900">Representational System Preference Test</CardTitle>
+          <CardDescription className="text-center text-base mt-2">
             Question {currentQuestion + 1} of {REP_SYSTEM_QUESTIONS.length}
           </CardDescription>
-          <Progress value={progress} className="w-full" />
+          <div className="pt-4">
+            <Progress value={progress} className="w-full h-2" />
+          </div>
         </CardHeader>
-        <CardContent className="space-y-6">
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold">{question.text}</h3>
-            <p className="text-sm text-gray-600">Rank each option from 1 (most descriptive) to 4 (least descriptive)</p>
+        <CardContent className="space-y-8">
+          <div className="space-y-6">
+            <div className="text-center space-y-3">
+              <h3 className="text-xl font-semibold text-gray-800 leading-relaxed px-4">{question.text}</h3>
+              <p className="text-sm text-gray-500 font-medium tracking-wide uppercase">Rank each option from 1 (most descriptive) to 4 (least descriptive)</p>
+            </div>
 
-            <div className="space-y-4">
+            <div className="space-y-4 pt-4">
               {question.options.map((option, optionIndex) => (
-                <div key={optionIndex} className="flex items-center justify-between p-4 border rounded-lg">
-                  <span className="flex-1">{option.text}</span>
-                  <div className="flex gap-2">
-                    {[1, 2, 3, 4].map((rank) => (
-                      <Button
-                        key={rank}
-                        variant={getCurrentRankings()[optionIndex] === rank ? "default" : "outline"}
-                        size="sm"
-                        onClick={() => handleRankingChange(optionIndex, rank)}
-                        className="w-10 h-10"
-                      >
-                        {rank}
-                      </Button>
-                    ))}
+                <div key={optionIndex} className="flex flex-col sm:flex-row sm:items-center justify-between p-5 border-2 border-gray-100 rounded-xl bg-gray-50/50 hover:bg-white hover:border-indigo-100 hover:shadow-sm transition-all duration-200 gap-6">
+                  <span className="flex-1 text-base text-gray-700 leading-relaxed font-medium">{option.text}</span>
+                  <div className="flex gap-2 sm:gap-3 shrink-0">
+                    {[1, 2, 3, 4].map((rank) => {
+                      const isSelected = getCurrentRankings()[optionIndex] === rank;
+                      return (
+                        <Button
+                          key={rank}
+                          variant={isSelected ? "default" : "outline"}
+                          size="sm"
+                          onClick={() => handleRankingChange(optionIndex, rank)}
+                          className={`w-12 h-12 rounded-full transition-all duration-200 border-2 ${
+                            isSelected 
+                              ? "bg-indigo-600 hover:bg-indigo-700 border-indigo-600 shadow-md scale-105 text-white" 
+                              : "bg-white hover:border-indigo-300 hover:text-indigo-600 hover:bg-indigo-50/50 text-gray-500 border-gray-200"
+                          }`}
+                        >
+                          <span className="text-lg">{rank}</span>
+                        </Button>
+                      );
+                    })}
                   </div>
                 </div>
               ))}
             </div>
 
-            <div className="text-xs text-gray-500 text-center">
-              1 = Most descriptive of you, 4 = Least descriptive of you
+            <div className="text-sm font-medium text-gray-400 text-center pt-4 flex items-center justify-center gap-6">
+              <span className="flex items-center gap-2"><span className="w-6 h-6 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center text-xs">1</span> Most descriptive</span>
+              <span className="flex items-center gap-2"><span className="w-6 h-6 rounded-full bg-gray-100 text-gray-500 flex items-center justify-center text-xs">4</span> Least descriptive</span>
             </div>
           </div>
 

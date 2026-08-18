@@ -1,0 +1,36 @@
+name: Supabase Keep Alive
+
+on:
+  # Runs every 5 days at 09:00 UTC — well within the 7-day inactivity window
+  schedule:
+    - cron: "0 9 */5 * *"
+
+  # Allow triggering manually from the GitHub Actions UI for testing
+  workflow_dispatch:
+
+jobs:
+  ping:
+    name: Ping Supabase
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Send keep-alive ping to Supabase
+        run: |
+          response=$(curl --silent --write-out "\n%{http_code}" \
+            --request GET \
+            "${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}/rest/v1/users?select=id&limit=1" \
+            --header "apikey: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}" \
+            --header "Authorization: Bearer ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}")
+
+          http_code=$(echo "$response" | tail -n1)
+          body=$(echo "$response" | head -n1)
+
+          echo "HTTP Status: $http_code"
+          echo "Response Body: $body"
+
+          if [ "$http_code" -ge 200 ] && [ "$http_code" -lt 300 ]; then
+            echo "Ping successful. Supabase project is alive."
+          else
+            echo "Ping failed with status $http_code. Check Supabase project status."
+            exit 1
+          fi
